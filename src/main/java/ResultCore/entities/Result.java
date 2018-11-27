@@ -1,20 +1,18 @@
 package ResultCore.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result {
-
-    public Result(Integer userId) {
-        this.userId = userId;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -23,22 +21,19 @@ public class Result {
     @Column(name = "user_id", unique = true)
     private Integer userId;
 
-    @Column(name = "nb_games_played")
-    private Integer nbGamesPlayed = 0;
+    @Column(name = "game_id", unique = true)
+    private Integer gameId;
 
-    @Column(name = "nb_games_won")
-    private Integer nbGamesWon = 0;
+    @Column(name = "money_won")
+    private Integer moneyWon = 0;
 
-    @Column(name = "nb_round_played")
-    private Integer nbRoundPlayed = 0;
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris")
+    private Date date;
 
-    @Column(name = "nb_round_won")
-    private Integer nbRoundWon = 0;
+    @Column(name = "combinaison")
+    private String combinaison;
 
-    @Column(name = "total_earned_money")
-    private Integer totalEarnedMoney = 0;
-
-    @Column(name = "biggest_pot_won")
-    private Integer biggestPotWon = 0;
 
 }

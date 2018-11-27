@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface ResultRepository extends JpaRepository<Result, Integer> {
 
     Optional<Result> findByUserId(Integer userId);
-    void deleteByUserId(Integer userId);
+    Optional<Result> findByGameId(Integer userId);
 
 }
