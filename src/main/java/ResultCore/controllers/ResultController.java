@@ -1,7 +1,7 @@
 package ResultCore.controllers;
 
 import ResultCore.entities.Result;
-import ResultCore.exceptions.ResultNotFoundException;
+import ResultCore.entities.ResultStat;
 import ResultCore.repositories.ResultRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +14,26 @@ public class ResultController {
     @Autowired
     private ResultRepository resultRepository;
 
-    @RequestMapping(value = "/results/users/{userId}", method = RequestMethod.GET)
-    Result getOneByUserId(@PathVariable Integer userId){
-        return resultRepository.findByUserId(userId)
-                               .orElseThrow(() -> new ResultNotFoundException(userId));
+    @RequestMapping(value = "/users/{userId}/stats", method = RequestMethod.GET)
+        ResultStat getOneByUserId(@PathVariable Integer userId){
+            ResultStat resultStat = new ResultStat();
+
+            resultStat.setTotalMoneyWon(resultRepository.getMoneyWonSumByUserId(userId));
+            resultStat.setNbGamePlayed(resultRepository.getNbGamePlayed(userId));
+            resultStat.setNbRoundPlayed(resultRepository.getNbRoundPlayed(userId));
+            resultStat.setNbRoundWon(resultRepository.getNbRoundWon(userId));
+            resultStat.setBiggestPotWon(resultRepository.getBiggestPotWon(userId));
+
+        return resultStat;
     }
 
-    @RequestMapping(value = "/results/games/{gameId}", method = RequestMethod.GET)
-    Result getOneByGameId(@PathVariable Integer gameId){
-        return resultRepository.findByGameId(gameId)
-                .orElseThrow(() -> new ResultNotFoundException(gameId));
-    }
 
     @RequestMapping(value = "/results", method = RequestMethod.POST)
     Result create(@RequestBody Result result) {
         log.info(result.toString());
         return resultRepository.save(result);
     }
+
+
 
 }
